@@ -14,8 +14,6 @@ class ViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
-		configurePlayers()
 	}
 
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -42,36 +40,27 @@ class ViewController: UIViewController {
 	fileprivate var playerTwoViewController: AVPlayerContaining?
 
 
-	fileprivate func configurePlayers() {
-		let playerOne = AVPlayer()
-		playerOne.allowsExternalPlayback = true
-		playerOneViewController?.avPlayer = playerOne
-
-		let playerTwo = AVPlayer()
-		playerTwo.allowsExternalPlayback = false
-		playerTwo.usesExternalPlaybackWhileExternalScreenIsActive = false
-		playerTwo.isMuted = true
-		playerTwoViewController?.avPlayer = playerTwo
-	}
-
 	@IBAction fileprivate func didTouchUpInside(playOneButton button: UIBarButtonItem) {
 		guard let url = Constant.SampleURL.BipBop else { return }
 
 		let item = AVPlayerItem(url: url)
-		playerOneViewController?.avPlayer?.replaceCurrentItem(with: item)
-		playerOneViewController?.avPlayer?.play()
+		let player = AVPlayer(playerItem: item)
+		player.allowsExternalPlayback = true
+
+		playerOneViewController?.avPlayer = player
+		player.play()
 	}
 
 	@IBAction fileprivate func didTouchUpInside(playTwoButton button: UIBarButtonItem) {
 		guard let url = Constant.SampleURL.ShortClip else { return }
 
 		let item = AVPlayerItem(url: url)
-		playerTwoViewController?.avPlayer?.replaceCurrentItem(with: item)
+		let player = AVPlayer(playerItem: item)
+		player.allowsExternalPlayback = false
+		player.isMuted = true
 
-		playerTwoViewController?.avPlayer?.allowsExternalPlayback = false
-		playerTwoViewController?.avPlayer?.isMuted = true
-
-		playerTwoViewController?.avPlayer?.play()
+		playerTwoViewController?.avPlayer = player
+		player.play()
 	}
 }
 
